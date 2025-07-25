@@ -23,8 +23,8 @@ if (flutterVersionName == null) {
 }
 
 android {
-    compileSdk 34
-    ndkVersion "23.1.7779620"
+    compileSdk 35
+    ndkVersion "28.1.13356709"
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -34,7 +34,7 @@ android {
     defaultConfig {
         applicationId "com.example.argon2_ffi_example"
         minSdkVersion 26
-        targetSdk 34
+        targetSdk 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
