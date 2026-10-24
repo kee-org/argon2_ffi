@@ -1,37 +1,26 @@
+plugins {
+    id 'com.android.library'
+}
+
 group 'com.example.argon2_ffi'
 version '1.0-SNAPSHOT'
 
-buildscript {
-    ext.kotlin_version = '1.8.20'
+allprojects {
     repositories {
         google()
         mavenCentral()
     }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.5.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-
-rootProject.allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-
-kotlin {
-    jvmToolchain(17)
 }
 
 android {
     namespace "design.codeux.argon2_ffi"
-    compileSdk 35
+    compileSdk 37
     ndkVersion "28.1.13356709"
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -56,6 +45,12 @@ android {
     }
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
+}
+
 dependencies {
-    implementation "androidx.annotation:annotation:1.8.0"
+    implementation "androidx.annotation:annotation:1.11.0"
 }
