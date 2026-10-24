@@ -18,3 +18,4 @@ ios/Classes/cmake_install.cmake
 ios/Classes/CMakeCache.txt
 ios/Classes/cmake-*
 ios/Classes/CMakeFiles
+example/ios/Flutter/ephemeral/
