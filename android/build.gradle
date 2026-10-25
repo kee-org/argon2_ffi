@@ -14,7 +14,7 @@ allprojects {
 
 android {
     namespace "design.codeux.argon2_ffi"
-    compileSdk 35
+    compileSdk 37
     ndkVersion "28.1.13356709"
 
     compileOptions {
@@ -52,5 +52,5 @@ kotlin {
 }
 
 dependencies {
-    implementation "androidx.annotation:annotation:1.8.0"
+    implementation "androidx.annotation:annotation:1.11.0"
 }
