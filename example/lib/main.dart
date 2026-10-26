@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:argon2_ffi_base/argon2_ffi_base.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +36,8 @@ class _MyAppState extends State<MyApp> {
               child: Text('hash stuff'),
               onPressed: () {
                 final args = Argon2Arguments(
-                  utf8.encode('abc') as Uint8List,
-                  utf8.encode('abc') as Uint8List,
+                  utf8.encode('abc'),
+                  utf8.encode('abc'),
                   1024,
                   2,
                   32,
