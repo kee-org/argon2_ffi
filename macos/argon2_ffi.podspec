@@ -18,7 +18,15 @@ A new flutter plugin project.
   s.source_files = 'Classes/*.m', 'Classes/*.{swift,h,m,c}', 'Classes/argon2src/**/*.c'
   s.dependency 'FlutterMacOS'
 
-  s.platform = :osx, '10.11'
-  s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
+  s.platform = :osx, '26.0'
+  # hp_argon2_hash must be exported from the framework: Dart finds it by name (DynamicLibrary.process() or the framework).
+  # A2_VISCTL makes ARGON2_PUBLIC an explicit default-visibility attribute; GCC_SYMBOLS_PRIVATE_EXTERN=NO keeps the default
+  # for everything else. Apple Silicon only.
+  s.pod_target_xcconfig = {
+    'DEFINES_MODULE' => 'YES',
+    'GCC_PREPROCESSOR_DEFINITIONS' => '$(inherited) A2_VISCTL=1',
+    'GCC_SYMBOLS_PRIVATE_EXTERN' => 'NO',
+    'EXCLUDED_ARCHS[sdk=macosx*]' => 'x86_64'
+  }
   s.swift_version = '5.0'
 end
