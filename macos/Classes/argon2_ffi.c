@@ -4,8 +4,12 @@
 #include <stdio.h>
 #include "argon2src/argon2.h"
 
+#define _CRT_SECURE_NO_WARNINGS
+
+//#include <android/log.h>
+
 //extern "C" __attribute__((visibility("default"))) __attribute__((used))
-int32_t native_add(int32_t x, int32_t y) {
+ARGON2_PUBLIC int32_t native_add(int32_t x, int32_t y) {
     return x + y;
 }
 //EOF
@@ -17,6 +21,8 @@ int32_t native_add(int32_t x, int32_t y) {
 #define DEBUG 0
 #define PRINT_DEBUG(fmt, ...) \
             do { if (DEBUG) printf(fmt, ##__VA_ARGS__); } while (0)
+//#define PRINT_DEBUG(fmt, ...) \
+//            do { if (DEBUG) __android_log_print(ANDROID_LOG_VERBOSE, "argon2ffi", fmt, ##__VA_ARGS__); } while (0)
 
 
 // base64 encoding https://nachtimwald.com/2017/11/18/base64-encode-and-decode-in-c/
@@ -77,7 +83,11 @@ char *hashStuff(char *hashPwd) {
     uint8_t salt[SALTLEN];
     memset(salt, 0x00, SALTLEN);
 
+    #ifdef _MSC_VER
+    uint8_t *pwd = (uint8_t *) _strdup(PWD);
+    #else
     uint8_t *pwd = (uint8_t *) strdup(PWD);
+    #endif
     uint32_t pwdlen = strlen((char *) pwd);
 
     uint32_t t_cost = 2;            // 1-pass computation
@@ -96,14 +106,14 @@ void debugBytes(uint8_t *bytes, int length) {
     }
 }
 
-char *hp_argon2_hash(uint8_t *key, size_t keylen, uint8_t *salt, size_t saltlen,
+ARGON2_PUBLIC char *hp_argon2_hash(uint8_t *key, uint32_t keylen, uint8_t *salt, uint32_t saltlen,
                      uint32_t m_cost,
                      uint32_t t_cost /* iterations*/, uint32_t parallelism,
-                     size_t hashlen,
+                     uint32_t hashlen,
                      uint8_t type, int32_t version) {
-    uint8_t hash1[hashlen];
-    PRINT_DEBUG("keylen: %ld, saltlen: %ld, m_cost: %ld, t_cost: %ld, hashlen: %ld, type: %d, version: %02x\n",
-           keylen, saltlen, m_cost, t_cost, hashlen, type, version);
+    uint8_t *hash1 = malloc(sizeof(uint8_t) * hashlen);
+    PRINT_DEBUG("keylen: %ld, saltlen: %ld, m_cost: %ld, t_cost: %ld, parallelism: %ld, hashlen: %ld, type: %d, version: %02x\n",
+           (long)keylen, (long)saltlen, (long)m_cost, (long)t_cost, (long)parallelism, (long)hashlen, type, version);
     PRINT_DEBUG("key: ");
 
     debugBytes(key, keylen);
@@ -128,6 +138,7 @@ char *hp_argon2_hash(uint8_t *key, size_t keylen, uint8_t *salt, size_t saltlen,
     debugBytes(hash1, hashlen);
     PRINT_DEBUG("\n");
     char *b64ret = b64_encode(hash1, hashlen);
+    free(hash1);
     return b64ret;
 }
 
